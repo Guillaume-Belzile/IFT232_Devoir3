@@ -41,12 +41,12 @@ public class ChessBoard {
     public void putPiece(ChessPiece piece) {
         Point2D pos = boardView.gridToPane(piece, piece.getGridX(), piece.getGridY());
         piece.getPane().relocate(pos.getX(), pos.getY());
-        getPane().getChildren().add(piece.getPane());
+        getUI().getPane().getChildren().add(piece.getPane());
         grid[piece.getGridX()][piece.getGridY()] = piece;
     }
 
-    public Pane getPane() {
-        return boardView.getPane();
+    public BoardView getUI() {
+        return boardView;
     }
 
     //Les cases vides contiennent une pièce spéciale
@@ -90,7 +90,7 @@ public class ChessBoard {
 
         //Si elle est occuppé par une pièce de couleur différente, alors c'est une capture
         else if (!isSameColor(gridPos, newGridPos)) {
-            getPane().getChildren().remove(grid[newGridPos.x][newGridPos.y].getPane());
+            getUI().getPane().getChildren().remove(grid[newGridPos.x][newGridPos.y].getPane());
             grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
             grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
 

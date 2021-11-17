@@ -114,14 +114,14 @@ public class ChessPiece {
 		// L'image de la pièce est également centrée sur la case la plus proche.
 		node.setOnMouseReleased(event -> {
 
-			Point newGridPos = board.paneToGrid(event.getSceneX(), event.getSceneY());
+			Point newGridPos = board.getUI().paneToGrid(event.getSceneX(), event.getSceneY());
 			if (board.move(getGridPos(), newGridPos)) {
 			
-				Point2D newPos = board.gridToPane(this, newGridPos.x, newGridPos.y);
+				Point2D newPos = board.getUI().gridToPane(this, newGridPos.x, newGridPos.y);
 				node.relocate(newPos.getX(), newPos.getY());
 				this.setGridPos(newGridPos);
 			} else {
-				Point2D oldPos = board.gridToPane(this, getGridX(), getGridY());
+				Point2D oldPos = board.getUI().gridToPane(this, getGridX(), getGridY());
 				node.relocate(oldPos.getX(), oldPos.getY());
 			}
 

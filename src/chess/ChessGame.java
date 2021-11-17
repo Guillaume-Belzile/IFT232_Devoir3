@@ -168,7 +168,7 @@ public class ChessGame extends Application {
 	//Retire la planche de jeu de la fenêtre
 	private void clearGame() {
 		if (board != null) {
-			gamePane.getChildren().remove(board.getPane());
+			gamePane.getChildren().remove(board.getUI());
 		}
 	}
 
@@ -183,10 +183,10 @@ public class ChessGame extends Application {
 		for(ChessPiece piece: pieces){
 			board.putPiece(piece);
 		}
-		gamePane.getChildren().add(board.getPane());
+		gamePane.getChildren().add(board.getUI().getPane());
 		// Attention! Le board peut masquer les autres contrôles s'il n'est pas
 		// placé complètement derrière eux.
-		board.getPane().toBack();
+		board.getUI().getPane().toBack();
 	}
 	
 	//Redémarre le jeu avec une planche de jeu chargée d'un fichier
@@ -197,10 +197,10 @@ public class ChessGame extends Application {
 		//Obtient la planche de jeu avec ses pièces à partir d'un fichier
 		loadBoard(file);
 
-		gamePane.getChildren().add(board.getPane());
+		gamePane.getChildren().add(board.getUI().getPane());
 		// Attention! Le board peut masquer les autres contrôles s'il n'est pas
 		// placé complètement derrière eux.
-		board.getPane().toBack();
+		board.getUI().getPane().toBack();
 	}
 
 	//Charge une planche de jeu à partir d'un fichier.
