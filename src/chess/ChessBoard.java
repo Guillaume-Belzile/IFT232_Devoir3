@@ -2,13 +2,11 @@ package chess;
 
 import chess.ui.BoardView;
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
 
 import java.awt.*;
 import java.io.File;
 
 //Représente la planche de jeu avec les pièces.
-
 
 public class ChessBoard {
 
@@ -40,8 +38,8 @@ public class ChessBoard {
     // Place une pièce sur le planche de jeu.
     public void putPiece(ChessPiece piece) {
         Point2D pos = boardView.gridToPane(piece, piece.getGridX(), piece.getGridY());
-        piece.getPane().relocate(pos.getX(), pos.getY());
-        getUI().getPane().getChildren().add(piece.getPane());
+        piece.getUI().getPane().relocate(pos.getX(), pos.getY());
+        getUI().getPane().getChildren().add(piece.getUI().getPane());
         grid[piece.getGridX()][piece.getGridY()] = piece;
     }
 
@@ -76,12 +74,11 @@ public class ChessBoard {
 
     //Effectue un mouvement sur l'échiqier. Quelques règles de base sont implantées ici.
     public boolean move(Point gridPos, Point newGridPos) {
-
         //Vérifie si les coordonnées sont valides
         if (!isValid(newGridPos))
             return false;
 
-            //Si la case destination est vide, on peut faire le mouvement
+        //Si la case destination est vide, on peut faire le mouvement
         else if (isEmpty(newGridPos)) {
             grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
             grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
@@ -90,7 +87,7 @@ public class ChessBoard {
 
         //Si elle est occuppé par une pièce de couleur différente, alors c'est une capture
         else if (!isSameColor(gridPos, newGridPos)) {
-            getUI().getPane().getChildren().remove(grid[newGridPos.x][newGridPos.y].getPane());
+            getUI().getPane().getChildren().remove(grid[newGridPos.x][newGridPos.y].getUI().getPane());
             grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
             grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
 
@@ -106,15 +103,11 @@ public class ChessBoard {
     }
 
     public static ChessBoard readFromFile(File file, int x, int y) throws Exception {
-
-
         throw new Exception("Pas implanté");
     }
 
 
     public void saveToFile(File file) throws Exception {
-
         throw new Exception("Pas implanté");
     }
-
 }
