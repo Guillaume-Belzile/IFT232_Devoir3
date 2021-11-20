@@ -2,114 +2,125 @@ package chess;
 
 import java.awt.Point;
 import java.util.ArrayList;
+
 import chess.ui.PieceView;
 
 public class ChessPiece {
 
-	// Position de la pièce sur l'échiquier
-	private int gridPosX;
-	private int gridPosY;
+    // Position de la pièce sur l'échiquier
+    private int gridPosX;
+    private int gridPosY;
 
-	private int type;
-	private int color;
+    private int type;
+    private int color;
 
-	private PieceView pieceView;
+    private PieceView pieceView;
 
-	// Pour créer des pièces à mettre sur les cases vides
-	public ChessPiece(int x, int y, ChessBoard b) {
-		this.type = ChessUtils.TYPE_NONE;
-		this.color = ChessUtils.COLORLESS;
-		gridPosX = x;
-		gridPosY = y;
+    // Pour créer des pièces à mettre sur les cases vides
+    public ChessPiece(int x, int y, ChessBoard b) {
+        this.type = ChessUtils.TYPE_NONE;
+        this.color = ChessUtils.COLORLESS;
+        gridPosX = x;
+        gridPosY = y;
 
-		pieceView = new PieceView(color, type, b);
-	}
+        pieceView = new PieceView(b);
+    }
 
-	// Création d'une pièce normale. La position algébrique en notation d'échecs
-	// lui donne sa position sur la grille.
-	public ChessPiece(String name, String pos, ChessBoard b) {
-		color = ChessUtils.getColor(name);
-		type = ChessUtils.getType(name);
+    // Création d'une pièce normale. La position algébrique en notation d'échecs
+    // lui donne sa position sur la grille.
+    public ChessPiece(String name, String pos, ChessBoard b) {
+        color = ChessUtils.getColor(name);
+        type = ChessUtils.getType(name);
 
-		pieceView = new PieceView(color, type, b);
+        pieceView = new PieceView(color, type, b);
 
-		setAlgebraicPos(pos);
-	}
-	
-	//Change la position avec la notation algébrique
-	public void setAlgebraicPos(String pos) {
-		Point pos2d = ChessUtils.convertAlgebraicPosition(pos);
+        setAlgebraicPos(pos);
+    }
 
-		gridPosX = pos2d.x;
-		gridPosY = pos2d.y;
-	}
+    //Change la position avec la notation algébrique
+    public void setAlgebraicPos(String pos) {
+        Point pos2d = ChessUtils.convertAlgebraicPosition(pos);
 
-	// Crée la liste de pièces avec leur position de départ pour un jeu d'échecs standard
-	public static ArrayList<ChessPiece> createInitialPieces(ChessBoard board) {
+        gridPosX = pos2d.x;
+        gridPosY = pos2d.y;
+    }
 
-		ArrayList<ChessPiece> pieces = new ArrayList<ChessPiece>();
+    // Crée la liste de pièces avec leur position de départ pour un jeu d'échecs standard
+    public static ArrayList<ChessPiece> createInitialPieces(ChessBoard board) {
 
-		pieces.add(new ChessPiece("wr", "a1", board));
-		pieces.add(new ChessPiece("wr", "h1", board));
-		pieces.add(new ChessPiece("wn", "b1", board));
-		pieces.add(new ChessPiece("wn", "g1", board));
-		pieces.add(new ChessPiece("wb", "c1", board));
-		pieces.add(new ChessPiece("wb", "f1", board));
-		pieces.add(new ChessPiece("wq", "d1", board));
-		pieces.add(new ChessPiece("wk", "e1", board));
+        ArrayList<ChessPiece> pieces = new ArrayList<ChessPiece>();
 
-		for (int i = 0; i < 8; i++) {
-			pieces.add(new ChessPiece("wp", ((char) ('a' + i)) + "2", board));
-		}
+        pieces.add(new ChessPiece("wr", "a1", board));
+        pieces.add(new ChessPiece("wr", "h1", board));
+        pieces.add(new ChessPiece("wn", "b1", board));
+        pieces.add(new ChessPiece("wn", "g1", board));
+        pieces.add(new ChessPiece("wb", "c1", board));
+        pieces.add(new ChessPiece("wb", "f1", board));
+        pieces.add(new ChessPiece("wq", "d1", board));
+        pieces.add(new ChessPiece("wk", "e1", board));
 
-		pieces.add(new ChessPiece("br", "a8", board));
-		pieces.add(new ChessPiece("br", "h8", board));
-		pieces.add(new ChessPiece("bn", "b8", board));
-		pieces.add(new ChessPiece("bn", "g8", board));
-		pieces.add(new ChessPiece("bb", "c8", board));
-		pieces.add(new ChessPiece("bb", "f8", board));
-		pieces.add(new ChessPiece("bq", "d8", board));
-		pieces.add(new ChessPiece("bk", "e8", board));
+        for (int i = 0; i < 8; i++) {
+            pieces.add(new ChessPiece("wp", ((char) ('a' + i)) + "2", board));
+        }
 
-		for (int i = 0; i < 8; i++) {
-			pieces.add(new ChessPiece("bp", ((char) ('a' + i)) + "7", board));
-		}
+        pieces.add(new ChessPiece("br", "a8", board));
+        pieces.add(new ChessPiece("br", "h8", board));
+        pieces.add(new ChessPiece("bn", "b8", board));
+        pieces.add(new ChessPiece("bn", "g8", board));
+        pieces.add(new ChessPiece("bb", "c8", board));
+        pieces.add(new ChessPiece("bb", "f8", board));
+        pieces.add(new ChessPiece("bq", "d8", board));
+        pieces.add(new ChessPiece("bk", "e8", board));
 
-		return pieces;
-	}
-	
-	//Pour savoir si c'est une pièce vide (pour les cases vides de l'échiquier).
-	public boolean isNone() {
+        for (int i = 0; i < 8; i++) {
+            pieces.add(new ChessPiece("bp", ((char) ('a' + i)) + "7", board));
+        }
 
-		return type == ChessUtils.TYPE_NONE;
-	}
+        return pieces;
+    }
 
-	public PieceView getUI() {
-		return pieceView;
-	}
+    //Pour savoir si c'est une pièce vide (pour les cases vides de l'échiquier).
+    public boolean isNone() {
+        return type == ChessUtils.TYPE_NONE;
+    }
 
-	public int getType() {
-		return type;
-	}
+    public PieceView getUI() {
+        return pieceView;
+    }
 
-	public int getColor() {
-		return color;
-	}
+    public int getType() {
+        return type;
+    }
 
-	public int getGridX() {
-		return gridPosX;
-	}
+    public int getColor() {
+        return color;
+    }
 
-	public int getGridY() {
-		return gridPosY;
-	}
+    public int getGridX() {
+        return gridPosX;
+    }
 
-	public Point getGridPos() {
-		return new Point(gridPosX, gridPosY);
-	}
+    public int getGridY() {
+        return gridPosY;
+    }
 
-	public void setGridPos(Point pos) {
-		gridPosX = pos.x;
-		gridPosY = pos.y;
-	}
+    public Point getGridPos() {
+        return new Point(gridPosX, gridPosY);
+    }
+
+    public void setGridPos(Point pos) {
+        gridPosX = pos.x;
+        gridPosY = pos.y;
+    }
+
+    public String saveToStream() {
+        return ChessUtils.makeAlgebraicPosition(gridPosX, gridPosY) + "-" + ChessUtils.makePieceName(color, type) + "\n";
+    }
+
+    public static ChessPiece readFromStream(String s, ChessBoard c) {
+        String[] line = s.split("-");
+        String pos = line[0];
+        String name = line[1];
+        return new ChessPiece(name, pos, c);
+    }
 }

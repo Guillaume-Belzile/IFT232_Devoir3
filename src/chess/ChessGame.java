@@ -191,7 +191,6 @@ public class ChessGame extends Application {
 	
 	//Redémarre le jeu avec une planche de jeu chargée d'un fichier
 	private void resetGame(File file) {
-
 		clearGame();
 		
 		//Obtient la planche de jeu avec ses pièces à partir d'un fichier

@@ -2,9 +2,12 @@ package chess;
 
 import chess.ui.BoardView;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
 
 //Représente la planche de jeu avec les pièces.
 
@@ -14,9 +17,9 @@ public class ChessBoard {
     // la grille.
     // Lorsqu'une case est vide, elle contient une pièce spéciale
     // (type=ChessPiece.NONE, color=ChessPiece.COLORLESS).
-    private ChessPiece[][] grid;
+    private final ChessPiece[][] grid;
 
-    private BoardView boardView;
+    private final BoardView boardView;
 
     public ChessBoard(int x, int y) {
         // Initialise la grille avec des pièces vides.
@@ -37,7 +40,7 @@ public class ChessBoard {
 
     // Place une pièce sur le planche de jeu.
     public void putPiece(ChessPiece piece) {
-        Point2D pos = boardView.gridToPane(piece, piece.getGridX(), piece.getGridY());
+        Point2D pos = boardView.gridToPane(piece.getGridX(), piece.getGridY());
         piece.getUI().getPane().relocate(pos.getX(), pos.getY());
         getUI().getPane().getChildren().add(piece.getUI().getPane());
         grid[piece.getGridX()][piece.getGridY()] = piece;
@@ -78,7 +81,7 @@ public class ChessBoard {
         if (!isValid(newGridPos))
             return false;
 
-        //Si la case destination est vide, on peut faire le mouvement
+            //Si la case destination est vide, on peut faire le mouvement
         else if (isEmpty(newGridPos)) {
             grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
             grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
@@ -96,18 +99,48 @@ public class ChessBoard {
 
         return false;
     }
-    //Fonctions de lecture et de sauvegarde d'échiquier dans des fichiers. À implanter.
 
+    public void move(Node node, Point2D pos, Point2D newPos) {
+        Point gridPos = getUI().paneToGrid(pos.getX(), pos.getY());
+        Point newGridPos = getUI().paneToGrid(newPos.getX(), newPos.getY());
+
+        Point2D finalPos;
+
+        if (move(gridPos, newGridPos)) {
+            finalPos = getUI().gridToPane(newGridPos.x, newGridPos.y);
+        } else {
+            finalPos = getUI().gridToPane(gridPos.x, gridPos.y);
+        }
+
+        node.relocate(finalPos.getX(), finalPos.getY());
+    }
+
+    //Fonctions de lecture et de sauvegarde d'échiquier dans des fichiers. À implanter.
     public static ChessBoard readFromFile(String fileName) throws Exception {
         return readFromFile(new File(fileName), 0, 0);
     }
 
     public static ChessBoard readFromFile(File file, int x, int y) throws Exception {
-        throw new Exception("Pas implanté");
+        ChessBoard c = new ChessBoard(x, y);
+        Scanner s = new Scanner(file);
+
+        while (s.hasNext()) {
+            c.putPiece(ChessPiece.readFromStream(s.next(), c));
+        }
+
+        return c;
     }
 
-
     public void saveToFile(File file) throws Exception {
-        throw new Exception("Pas implanté");
+        FileWriter fw = new FileWriter(file);
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!grid[i][j].isNone())
+                    fw.write(grid[i][j].saveToStream());
+            }
+        }
+
+        fw.close();
     }
 }

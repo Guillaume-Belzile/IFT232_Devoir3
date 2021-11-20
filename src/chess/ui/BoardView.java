@@ -59,14 +59,12 @@ public class BoardView {
         boardPane = new Pane(boardView);
     }
 
-    public Point2D gridToPane(ChessPiece piece, int x, int y) {
-
+    public Point2D gridToPane(int x, int y) {
         if (x < 0 || x > 7 || y < 0 || y > 7)
             throw new IllegalArgumentException("Piece out of grid: (" + x + "," + y + ")");
 
         return new Point2D(startX + x * squareSize + borderSize + pieceDeltaX,
                 startY + y * squareSize + borderSize + pieceDeltaY);
-
     }
 
     //Convertit des coordonnées en pixels sur la fenêtre d'interface en coordonnées dans la grille de l'échiquier
