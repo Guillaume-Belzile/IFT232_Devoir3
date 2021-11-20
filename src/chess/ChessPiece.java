@@ -104,10 +104,6 @@ public class ChessPiece {
         return gridPosY;
     }
 
-    public Point getGridPos() {
-        return new Point(gridPosX, gridPosY);
-    }
-
     public void setGridPos(Point pos) {
         gridPosX = pos.x;
         gridPosY = pos.y;
