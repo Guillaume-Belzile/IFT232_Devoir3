@@ -51,7 +51,6 @@ public class PieceView {
         pieceView.setPreserveRatio(true);
         piecePane = new Pane(pieceView);
         enableDragging(piecePane);
-
     }
 
     // Gestionnaire d'événements pour le déplacement des pièces
