@@ -123,4 +123,15 @@ public class ChessPiece {
         String name = line[1];
         return new ChessPiece(name, pos, c);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece piece = (ChessPiece) o;
+        return gridPosX == piece.gridPosX &&
+                gridPosY == piece.gridPosY &&
+                type == piece.type &&
+                color == piece.color;
+    }
 }

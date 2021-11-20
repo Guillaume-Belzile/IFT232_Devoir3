@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 
 //Représente la planche de jeu avec les pièces.
@@ -81,8 +82,9 @@ public class ChessBoard {
         if (!isValid(newGridPos))
             return false;
 
-            //Si la case destination est vide, on peut faire le mouvement
+        //Si la case destination est vide, on peut faire le mouvement
         else if (isEmpty(newGridPos)) {
+            grid[gridPos.x][gridPos.y].setGridPos(newGridPos);
             grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
             grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
             return true;
@@ -91,9 +93,9 @@ public class ChessBoard {
         //Si elle est occuppé par une pièce de couleur différente, alors c'est une capture
         else if (!isSameColor(gridPos, newGridPos)) {
             getUI().getPane().getChildren().remove(grid[newGridPos.x][newGridPos.y].getUI().getPane());
+            grid[gridPos.x][gridPos.y].setGridPos(newGridPos);
             grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
             grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
-
             return true;
         }
 
@@ -142,5 +144,19 @@ public class ChessBoard {
         }
 
         fw.close();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessBoard board = (ChessBoard) o;
+
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (!grid[i][j].equals(board.grid[i][j]))
+                    return false;
+
+        return true;
     }
 }
