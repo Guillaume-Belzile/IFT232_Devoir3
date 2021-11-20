@@ -122,11 +122,11 @@ public class MoveTest {
         assertTrue(game.compareBoard(result));
 
         result = ChessBoard.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic2");
-        game.movePiece("a8-a4");
+        game.movePiece("a8-a3");
         assertTrue(game.compareBoard(result));
 
         result = ChessBoard.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic3");
-        game.movePiece("a4-e3");
+        game.movePiece("a3-e3");
         assertTrue(game.compareBoard(result));
 
         result = ChessBoard.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic4");

@@ -1,6 +1,5 @@
 package chess.ui;
 
-import chess.ChessPiece;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

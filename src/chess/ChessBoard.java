@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Arrays;
 import java.util.Scanner;
 
 //Représente la planche de jeu avec les pièces.
@@ -34,9 +33,22 @@ public class ChessBoard {
         boardView = new BoardView(x, y);
     }
 
+    public void assignSquare(Point gridPos, ChessPiece piece) {
+        grid[gridPos.x][gridPos.y] = piece;
+        piece.setGridPos(gridPos);
+    }
+
+    public void clearSquare(Point gridPos) {
+        clearSquare(gridPos.x, gridPos.y);
+    }
+
     // Place une pièce vide dans la case
     public void clearSquare(int x, int y) {
         grid[x][y] = new ChessPiece(x, y, this);
+    }
+
+    public ChessPiece getPiece(Point gridPos) {
+        return grid[gridPos.x][gridPos.y];
     }
 
     // Place une pièce sur le planche de jeu.
@@ -45,6 +57,12 @@ public class ChessBoard {
         piece.getUI().getPane().relocate(pos.getX(), pos.getY());
         getUI().getPane().getChildren().add(piece.getUI().getPane());
         grid[piece.getGridX()][piece.getGridY()] = piece;
+    }
+
+    public void removePiece(Point gridPos) {
+        ChessPiece piece = getPiece(gridPos);
+        getUI().getPane().getChildren().remove(piece.getUI().getPane());
+        clearSquare(gridPos);
     }
 
     public BoardView getUI() {
@@ -77,25 +95,31 @@ public class ChessBoard {
     }
 
     //Effectue un mouvement sur l'échiqier. Quelques règles de base sont implantées ici.
-    public boolean move(Point gridPos, Point newGridPos) {
+    public boolean move(Point startPos, Point endPos) {
+        ChessPiece toMove = getPiece(startPos);
+
+        if (!toMove.verifyMove(startPos, endPos)) {
+            return false;
+        }
+
         //Vérifie si les coordonnées sont valides
-        if (!isValid(newGridPos))
+        if (!isValid(endPos))
             return false;
 
-        //Si la case destination est vide, on peut faire le mouvement
-        else if (isEmpty(newGridPos)) {
-            grid[gridPos.x][gridPos.y].setGridPos(newGridPos);
-            grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
-            grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
+            //Si la case destination est vide, on peut faire le mouvement
+        else if (isEmpty(endPos)) {
+            ChessPiece piece = getPiece(startPos);
+            assignSquare(endPos, piece);
+            clearSquare(startPos);
             return true;
         }
 
         //Si elle est occuppé par une pièce de couleur différente, alors c'est une capture
-        else if (!isSameColor(gridPos, newGridPos)) {
-            getUI().getPane().getChildren().remove(grid[newGridPos.x][newGridPos.y].getUI().getPane());
-            grid[gridPos.x][gridPos.y].setGridPos(newGridPos);
-            grid[newGridPos.x][newGridPos.y] = grid[gridPos.x][gridPos.y];
-            grid[gridPos.x][gridPos.y] = new ChessPiece(gridPos.x, gridPos.y, this);
+        else if (!isSameColor(startPos, endPos)) {
+            ChessPiece piece = getPiece(startPos);
+            removePiece(endPos);
+            assignSquare(endPos, piece);
+            clearSquare(startPos);
             return true;
         }
 

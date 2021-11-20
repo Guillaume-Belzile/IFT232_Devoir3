@@ -18,8 +18,8 @@ public class ChessPiece {
 
     // Pour créer des pièces à mettre sur les cases vides
     public ChessPiece(int x, int y, ChessBoard b) {
-        this.type = ChessUtils.TYPE_NONE;
-        this.color = ChessUtils.COLORLESS;
+        type = ChessUtils.TYPE_NONE;
+        color = ChessUtils.COLORLESS;
         gridPosX = x;
         gridPosY = y;
 
@@ -111,6 +111,43 @@ public class ChessPiece {
     public void setGridPos(Point pos) {
         gridPosX = pos.x;
         gridPosY = pos.y;
+    }
+
+    public boolean verifyMove(Point startPos, Point endPos) {
+        int deltaX = startPos.x - endPos.x;
+        int deltaY = startPos.y - endPos.y;
+
+        switch (type) {
+            case ChessUtils.TYPE_PAWN: {
+                if (deltaX != 0) return false;
+
+                if (color == ChessUtils.WHITE)
+                    return deltaY == 1 || deltaY == 2 && startPos.y == 6;
+                else if (color == ChessUtils.BLACK)
+                    return deltaY == -1 || deltaY == -2 && startPos.y == 1;
+
+                return false;
+            }
+            case ChessUtils.TYPE_KNIGHT: {
+                return Math.abs(deltaX) == 1 && Math.abs(deltaY) == 2 ||
+                        Math.abs(deltaX) == 2 && Math.abs(deltaY) == 1;
+            }
+            case ChessUtils.TYPE_BISHOP: {
+                return Math.abs(deltaX) == Math.abs(deltaY);
+            }
+            case ChessUtils.TYPE_ROOK: {
+                return deltaX == 0 ^ deltaY == 0;
+            }
+            case ChessUtils.TYPE_QUEEN: {
+                return Math.abs(deltaX) == Math.abs(deltaY) || deltaX == 0 ^ deltaY == 0;
+            }
+            case ChessUtils.TYPE_KING: {
+                return Math.abs(deltaX) < 2 && Math.abs(deltaY) < 2;
+            }
+            case ChessUtils.TYPE_NONE:
+            default:
+                return false;
+        }
     }
 
     public String saveToStream() {
