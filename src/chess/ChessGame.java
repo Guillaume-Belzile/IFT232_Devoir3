@@ -1,8 +1,5 @@
 package chess;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-
 import java.awt.*;
 import java.io.File;
 
