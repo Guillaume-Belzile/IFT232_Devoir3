@@ -7,7 +7,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 
 import java.awt.*;
-import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -20,22 +19,54 @@ public class ChessBoard {
     // la grille.
     // Lorsqu'une case est vide, elle contient une pièce spéciale
     // (type=ChessPiece.NONE, color=ChessPiece.COLORLESS).
-    private final ChessPiece[][] grid;
+    private ChessPiece[][] grid;
 
-    private final BoardView boardView;
+    private BoardView boardView;
+
+    private Stack<ChessMove> pastMoves;
+
+    private BoardMemento initialState;
 
     public ChessBoard(int x, int y) {
-        // Initialise la grille avec des pièces vides.
-        grid = new ChessPiece[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                grid[i][j] = new ChessPiece(i, j, this);
-            }
-        }
+        initialize();
+
+        initialState = createMemento();
 
         boardView = new BoardView(x, y);
 
         pastMoves = new Stack<>();
+    }
+
+    public ChessBoard(BoardMemento m) {
+        restoreMemento(m, this);
+    }
+
+    public BoardMemento getState() {
+        return initialState;
+    }
+
+    public void setState(BoardMemento initialState) {
+        this.initialState = initialState;
+    }
+
+    public void saveToFile(FileWriter fw) {
+        initialState.saveToFile(fw);
+
+        ArrayList<ChessMove> moves = new ArrayList<>(pastMoves);
+
+        for (int i = 0; i < moves.size(); i++) {
+            moves.get(i).saveToStream(fw);
+        }
+    }
+
+    private void initialize() {
+        // Initialise la grille avec des pièces vides.
+        grid = new ChessPiece[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                grid[i][j] = new ChessPiece(i, j);
+            }
+        }
     }
 
     public void assignSquare(Point gridPos, ChessPiece piece) {
@@ -49,7 +80,7 @@ public class ChessBoard {
 
     // Place une pièce vide dans la case
     public void clearSquare(int x, int y) {
-        grid[x][y] = new ChessPiece(x, y, this);
+        grid[x][y] = new ChessPiece(x, y);
     }
 
     public ChessPiece getPiece(Point gridPos) {
@@ -133,7 +164,7 @@ public class ChessBoard {
         return false;
     }
 
-    public void move(Node node, Point2D pos, Point2D newPos) {
+    public boolean move(Node node, Point2D pos, Point2D newPos) {
         Point gridPos = getUI().paneToGrid(pos.getX(), pos.getY());
         Point newGridPos = getUI().paneToGrid(newPos.getX(), newPos.getY());
 
@@ -149,35 +180,8 @@ public class ChessBoard {
         }
 
         node.relocate(finalPos.getX(), finalPos.getY());
-    }
 
-    //Fonctions de lecture et de sauvegarde d'échiquier dans des fichiers. À implanter.
-    public static ChessBoard readFromFile(String fileName) throws Exception {
-        return readFromFile(new File(fileName), 0, 0);
-    }
-
-    public static ChessBoard readFromFile(File file, int x, int y) throws Exception {
-        ChessBoard c = new ChessBoard(x, y);
-        Scanner s = new Scanner(file);
-
-        while (s.hasNext()) {
-            c.putPiece(ChessPiece.readFromStream(s.next(), c));
-        }
-
-        return c;
-    }
-
-    public void saveToFile(File file) throws Exception {
-        FileWriter fw = new FileWriter(file);
-
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (!grid[i][j].isNone())
-                    fw.write(grid[i][j].saveToStream());
-            }
-        }
-
-        fw.close();
+        return res;
     }
 
     @Override

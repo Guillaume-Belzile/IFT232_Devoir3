@@ -10,12 +10,14 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GameView extends Application {
 
     private ChessGame game;
-
 
     //Taille de la fenêtre
     private int gameSizeX = 1200;
@@ -158,8 +160,8 @@ public class GameView extends Application {
 
     //Retire la planche de jeu de la fenêtre
     private void clearGame() {
-        if (game.getboard() != null) {
-            gamePane.getChildren().remove(game.getboard().getUI().getPane());
+        if (game.getBoard() != null) {
+            gamePane.getChildren().remove(game.getBoard().getUI().getPane());
         }
     }
 
@@ -168,14 +170,14 @@ public class GameView extends Application {
         clearGame();
         game.resetBoard();
         ArrayList<ChessPiece> pieces = new ArrayList<ChessPiece>();
-        pieces = ChessPiece.createInitialPieces(game.getboard());
+        pieces = ChessPiece.createInitialPieces(game.getBoard());
         for (ChessPiece piece : pieces) {
-            game.getboard().putPiece(piece);
+            game.getBoard().putPiece(piece);
         }
-        gamePane.getChildren().add(game.getboard().getUI().getPane());
+        gamePane.getChildren().add(game.getBoard().getUI().getPane());
         // Attention! Le board peut masquer les autres contrôles s'il n'est pas
         // placé complètement derrière eux.
-        game.getboard().getUI().getPane().toBack();
+        game.getBoard().getUI().getPane().toBack();
     }
 
     //Redémarre le jeu avec une planche de jeu chargée d'un fichier
@@ -185,16 +187,18 @@ public class GameView extends Application {
         //Obtient la planche de jeu avec ses pièces à partir d'un fichier
         loadBoard(file);
 
-        gamePane.getChildren().add(game.getboard().getUI().getPane());
+        gamePane.getChildren().add(game.getBoard().getUI().getPane());
         // Attention! Le board peut masquer les autres contrôles s'il n'est pas
         // placé complètement derrière eux.
-        game.getboard().getUI().getPane().toBack();
+        game.getBoard().getUI().getPane().toBack();
     }
 
     //Démarre l'enregistrement des mouvements du jeu dans un fichier de script.
     private void saveScript(File file) {
         try {
-            throw new Exception("Pas implanté!");
+            FileWriter fw = new FileWriter(file);
+            game.getBoard().saveToFile(fw);
+            fw.close();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error writing file", ButtonType.OK);
             alert.showAndWait();
@@ -202,10 +206,14 @@ public class GameView extends Application {
         }
     }
 
+
+
     //Charge un fichier de script
     private void loadScript(File file) {
         try {
-            throw new Exception("Pas implanté!");
+            //game.loadBoard(file.getPath());
+            gamePane.getChildren().add(game.getBoard().getUI().getPane());
+            game.getBoard().getUI().getPane().toBack();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error reading file", ButtonType.OK);
             alert.showAndWait();

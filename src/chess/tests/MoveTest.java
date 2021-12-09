@@ -2,6 +2,7 @@ package chess.tests;
 
 import chess.ChessBoard;
 import chess.ChessGame;
+import chess.memento.BoardMemento;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class MoveTest {
     @Test
     public void testBasicCollision() throws Exception {
         game.loadBoard("boards/normalStart");
-        ChessBoard result = ChessBoard.readFromFile("boards/normalStart");
+        ChessBoard result = BoardMemento.readFromFile("boards/normalStart");
         //Move tower over a pawn of the same color
         game.movePiece("a1-a2");
         assertTrue(game.compareBoard(result));
@@ -29,7 +30,7 @@ public class MoveTest {
     public void testMoveBishop() throws Exception {
         game.loadBoard("boards/saves/testsBishop/bishopBasic");
 
-        ChessBoard result = ChessBoard.readFromFile("boards/saves/testsBishop/apresdeplacement/bishopbasic1");
+        ChessBoard result = BoardMemento.readFromFile("boards/saves/testsBishop/apresdeplacement/bishopbasic1");
         game.movePiece("e4-c6");
         assertTrue(game.compareBoard(result));
 
@@ -95,11 +96,11 @@ public class MoveTest {
     public void testMovePawn() throws Exception {
         game.loadBoard("boards/saves/testsPawn/pawnBasic");
 
-        ChessBoard result = ChessBoard.readFromFile("boards/saves/testsPawn/apresdeplacement/pawnbasic1");
+        ChessBoard result = BoardMemento.readFromFile("boards/saves/testsPawn/apresdeplacement/pawnbasic1");
         game.movePiece("e2-e4");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsPawn/apresdeplacement/pawnbasic2");
+        result = BoardMemento.readFromFile("boards/saves/testsPawn/apresdeplacement/pawnbasic2");
         game.movePiece("e4-e5");
         assertTrue(game.compareBoard(result));
 
@@ -117,19 +118,19 @@ public class MoveTest {
     public void testMoveQueen() throws Exception {
         game.loadBoard("boards/saves/testsQueen/queenBasic");
 
-        ChessBoard result = ChessBoard.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic1");
+        ChessBoard result = BoardMemento.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic1");
         game.movePiece("e4-a8");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic2");
+        result = BoardMemento.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic2");
         game.movePiece("a8-a3");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic3");
+        result = BoardMemento.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic3");
         game.movePiece("a3-e3");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic4");
+        result = BoardMemento.readFromFile("boards/saves/testsQueen/apresdeplacement/queenbasic4");
         game.movePiece("e3-f3");
         assertTrue(game.compareBoard(result));
 
@@ -141,11 +142,11 @@ public class MoveTest {
     public void testMoveRook() throws Exception {
         game.loadBoard("boards/saves/testsRook/rookBasic");
 
-        ChessBoard result = ChessBoard.readFromFile("boards/saves/testsRook/apresdeplacement/rookbasic1");
+        ChessBoard result = BoardMemento.readFromFile("boards/saves/testsRook/apresdeplacement/rookbasic1");
         game.movePiece("e4-e8");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsRook/apresdeplacement/rookbasic2");
+        result = BoardMemento.readFromFile("boards/saves/testsRook/apresdeplacement/rookbasic2");
         game.movePiece("e8-c8");
         assertTrue(game.compareBoard(result));
 

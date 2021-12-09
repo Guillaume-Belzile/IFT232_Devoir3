@@ -1,7 +1,11 @@
 package chess;
 
+import chess.memento.BoardMemento;
+
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
 
 public class ChessGame {
 
@@ -18,7 +22,7 @@ public class ChessGame {
         board = new ChessBoard(boardPosX, boardPosY);
     }
 
-    public ChessBoard getboard() {
+    public ChessBoard getBoard() {
         return board;
     }
 
@@ -27,12 +31,12 @@ public class ChessGame {
     }
 
     public void saveBoard(String path) throws Exception {
-        board.saveToFile(new File(path));
+        board.createMemento().saveToFile(new FileWriter(path));
     }
 
     //Charge une planche de jeu à partir d'un fichier.
     public void loadBoard(String path) throws Exception {
-        board = ChessBoard.readFromFile(new File(path), boardPosX, boardPosY);
+        board = BoardMemento.readFromFile(new File(path), boardPosX, boardPosY);
     }
 
     public void movePiece(String move) {

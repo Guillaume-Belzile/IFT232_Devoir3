@@ -15,16 +15,14 @@ public class ChessPiece {
     private int type;
     private int color;
 
-    private PieceView pieceView;
+    public PieceView pieceView;
 
     // Pour créer des pièces à mettre sur les cases vides
-    public ChessPiece(int x, int y, ChessBoard b) {
+    public ChessPiece(int x, int y) {
         type = ChessUtils.TYPE_NONE;
         color = ChessUtils.COLORLESS;
         gridPosX = x;
         gridPosY = y;
-
-        pieceView = new PieceView(b);
     }
 
     // Création d'une pièce normale. La position algébrique en notation d'échecs
@@ -36,6 +34,15 @@ public class ChessPiece {
         pieceView = new PieceView(color, type, b);
 
         setAlgebraicPos(pos);
+    }
+
+    public ChessPiece(PieceMemento m, ChessBoard b) {
+        makePieceString(m, b);
+    }
+
+    private ChessPiece makePieceString(PieceMemento m, ChessBoard b) {
+        String[] pieceData = m.getPiece().split("-");
+        return new ChessPiece(pieceData[0], pieceData[1], b);
     }
 
     //Change la position avec la notation algébrique
