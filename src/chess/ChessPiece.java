@@ -3,6 +3,7 @@ package chess;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import chess.memento.PieceMemento;
 import chess.ui.PieceView;
 
 public class ChessPiece {
@@ -146,15 +147,18 @@ public class ChessPiece {
         }
     }
 
-    public String saveToStream() {
-        return ChessUtils.makeAlgebraicPosition(gridPosX, gridPosY) + "-" + ChessUtils.makePieceName(color, type) + "\n";
+    public PieceMemento createMemento(){
+        return new PieceMemento(this);
     }
 
-    public static ChessPiece readFromStream(String s, ChessBoard c) {
-        String[] line = s.split("-");
-        String pos = line[0];
-        String name = line[1];
-        return new ChessPiece(name, pos, c);
+    public void restoreMemento(PieceMemento m, ChessBoard b) {
+        ChessPiece p = makePieceString(m, b);
+
+        pieceView = p.pieceView;
+        gridPosX = p.gridPosX;
+        gridPosY = p.gridPosY;
+        type = p.type;
+        color = p.color;
     }
 
     @Override

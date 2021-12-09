@@ -1,5 +1,7 @@
 package chess;
 
+import chess.memento.BoardMemento;
+import chess.memento.PieceMemento;
 import chess.ui.BoardView;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -7,7 +9,8 @@ import javafx.scene.Node;
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Stack;
 
 //Représente la planche de jeu avec les pièces.
 
@@ -31,6 +34,8 @@ public class ChessBoard {
         }
 
         boardView = new BoardView(x, y);
+
+        pastMoves = new Stack<>();
     }
 
     public void assignSquare(Point gridPos, ChessPiece piece) {
@@ -91,35 +96,37 @@ public class ChessBoard {
         }
         String start = move.substring(0, 2);
         String end = move.substring(3, 5);
-        move(ChessUtils.convertAlgebraicPosition(start), ChessUtils.convertAlgebraicPosition(end));
+        move(new ChessMove(ChessUtils.convertAlgebraicPosition(start), ChessUtils.convertAlgebraicPosition(end), createMemento()));
     }
 
     //Effectue un mouvement sur l'échiqier. Quelques règles de base sont implantées ici.
-    public boolean move(Point startPos, Point endPos) {
-        ChessPiece toMove = getPiece(startPos);
+    public boolean move(ChessMove cm) {
+        ChessPiece toMove = getPiece(cm.getStart());
 
-        if (!toMove.verifyMove(startPos, endPos)) {
+        if (!toMove.verifyMove(cm.getStart(), cm.getEnd())) {
             return false;
         }
 
         //Vérifie si les coordonnées sont valides
-        if (!isValid(endPos))
+        if (!isValid(cm.getEnd()))
             return false;
 
             //Si la case destination est vide, on peut faire le mouvement
-        else if (isEmpty(endPos)) {
-            ChessPiece piece = getPiece(startPos);
-            assignSquare(endPos, piece);
-            clearSquare(startPos);
+        else if (isEmpty(cm.getEnd())) {
+            ChessPiece piece = getPiece(cm.getStart());
+            assignSquare(cm.getEnd(), piece);
+            clearSquare(cm.getStart());
             return true;
         }
 
         //Si elle est occuppé par une pièce de couleur différente, alors c'est une capture
-        else if (!isSameColor(startPos, endPos)) {
-            ChessPiece piece = getPiece(startPos);
-            removePiece(endPos);
-            assignSquare(endPos, piece);
-            clearSquare(startPos);
+        else if (!isSameColor(cm.getStart(), cm.getEnd())) {
+            ChessPiece piece = getPiece(cm.getStart());
+            removePiece(cm.getEnd());
+            assignSquare(cm.getEnd(), piece);
+            clearSquare(cm.getStart());
+
+
             return true;
         }
 
@@ -131,9 +138,12 @@ public class ChessBoard {
         Point newGridPos = getUI().paneToGrid(newPos.getX(), newPos.getY());
 
         Point2D finalPos;
+        ChessMove m = new ChessMove(boardView.paneToGrid(pos.getX(), pos.getY()), boardView.paneToGrid(newPos.getX(), newPos.getY()), createMemento());
+        boolean res = move(m);
 
-        if (move(gridPos, newGridPos)) {
+        if (move(m)) {
             finalPos = getUI().gridToPane(newGridPos.x, newGridPos.y);
+            pastMoves.add(m);
         } else {
             finalPos = getUI().gridToPane(gridPos.x, gridPos.y);
         }
@@ -183,4 +193,47 @@ public class ChessBoard {
 
         return true;
     }
+
+    public BoardMemento createMemento() {
+        PieceMemento[][] mementos = new PieceMemento[8][8];
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++) {
+                ChessPiece p = grid[i][j];
+                if (!p.isNone())
+                mementos[i][j] = new PieceMemento(grid[i][j]);
+            }
+        }
+            
+        return new BoardMemento(mementos);
+    }
+
+    public void restoreMemento(BoardMemento m, ChessBoard b) {
+        for (ChessPiece[] pieces : grid) {
+            for (ChessPiece p : pieces) {
+                if (p != null)
+                    removePiece(new Point(p.getGridX(), p.getGridY()));
+            }
+        }
+
+        initialize();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+
+                ChessPiece p = grid[i][j];
+
+                if (m.getListPieces() != null) {
+                    p.restoreMemento(m.getListPieces()[i][j], this);
+
+                    Point2D pos = boardView.gridToPane(p.getGridX(), p.getGridY());
+
+                    p.getUI().getPane().relocate(pos.getX(), pos.getY());
+                }
+            }
+        }
+    }
+
+
+
 }

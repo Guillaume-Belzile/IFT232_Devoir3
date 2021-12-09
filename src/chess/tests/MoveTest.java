@@ -33,11 +33,11 @@ public class MoveTest {
         game.movePiece("e4-c6");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsBishop/apresdeplacement/bishopbasic2");
+        result = BoardMemento.readFromFile("boards/saves/testsBishop/apresdeplacement/bishopbasic2");
         game.movePiece("c6-b5");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsBishop/apresdeplacement/bishopbasic3");
+        result = BoardMemento.readFromFile("boards/saves/testsBishop/apresdeplacement/bishopbasic3");
         game.movePiece("b5-e2");
         assertTrue(game.compareBoard(result));
 
@@ -52,15 +52,15 @@ public class MoveTest {
     public void testMoveKing() throws Exception {
         game.loadBoard("boards/saves/testsKing/kingBasic");
 
-        ChessBoard result = ChessBoard.readFromFile("boards/saves/testsKing/apresdeplacement/kingbasic1");
+        ChessBoard result = BoardMemento.readFromFile("boards/saves/testsKing/apresdeplacement/kingbasic1");
         game.movePiece("e4-d5");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsKing/apresdeplacement/kingbasic2");
+        result = BoardMemento.readFromFile("boards/saves/testsKing/apresdeplacement/kingbasic2");
         game.movePiece("d5-d4");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsKing/apresdeplacement/kingbasic3");
+        result = BoardMemento.readFromFile("boards/saves/testsKing/apresdeplacement/kingbasic3");
         game.movePiece("d4-e3");
         assertTrue(game.compareBoard(result));
 
@@ -72,15 +72,15 @@ public class MoveTest {
     public void testMoveKnight() throws Exception {
         game.loadBoard("boards/saves/testsKnight/knightBasic");
 
-        ChessBoard result = ChessBoard.readFromFile("boards/saves/testsKnight/apresdeplacement/knightbasic1");
+        ChessBoard result = BoardMemento.readFromFile("boards/saves/testsKnight/apresdeplacement/knightbasic1");
         game.movePiece("e4-d6");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsKnight/apresdeplacement/knightbasic2");
+        result = BoardMemento.readFromFile("boards/saves/testsKnight/apresdeplacement/knightbasic2");
         game.movePiece("d6-c4");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsKnight/apresdeplacement/knightbasic3");
+        result = BoardMemento.readFromFile("boards/saves/testsKnight/apresdeplacement/knightbasic3");
         game.movePiece("c4-e3");
         assertTrue(game.compareBoard(result));
 
@@ -149,7 +149,7 @@ public class MoveTest {
         game.movePiece("e8-c8");
         assertTrue(game.compareBoard(result));
 
-        result = ChessBoard.readFromFile("boards/saves/testsRook/apresdeplacement/rookbasic3");
+        result = BoardMemento.readFromFile("boards/saves/testsRook/apresdeplacement/rookbasic3");
         game.movePiece("c8-c3");
         assertTrue(game.compareBoard(result));
 

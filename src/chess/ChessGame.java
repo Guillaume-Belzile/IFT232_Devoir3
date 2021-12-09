@@ -12,6 +12,8 @@ public class ChessGame {
     //Planche de jeu (incluant les pi�ces)
     private ChessBoard board;
 
+    private BoardMemento initialState;
+
     public ChessGame() {
         board = new ChessBoard(boardPosX, boardPosY);
     }
@@ -34,10 +36,8 @@ public class ChessGame {
     }
 
     public void movePiece(String move) {
-        String[] splittedMove = move.split("-");
-        Point p1 = ChessUtils.convertAlgebraicPosition(splittedMove[0]);
-        Point p2 = ChessUtils.convertAlgebraicPosition(splittedMove[1]);
-        board.move(p1, p2);
+        board.move(new ChessMove(move, getBoard().createMemento()));
+        initialState = board.createMemento();
     }
 
     public boolean compareBoard(ChessBoard o) {
